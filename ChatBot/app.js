@@ -1,9 +1,9 @@
-const apiKey = "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"; // Replace with your API key
+const apiKey = process.env.REACT_APP_API_KEY; 
 const apiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions";
 
 const sendButton = document.getElementById("send-button");
 const userInput = document.getElementById("user-input");
-const chatArea = document.getElementById("chat-area");
+const chatArea = document.getElementById("chat-log");
 
 sendButton.addEventListener("click", sendMessage);
 
@@ -13,28 +13,25 @@ function appendMessage(message) {
   chatArea.appendChild(messageDiv);
   chatArea.scrollTop = chatArea.scrollHeight;
 }
-
 async function sendMessage() {
   const userMessage = userInput.value;
   if (userMessage.trim() !== "") {
     appendMessage("You: " + userMessage);
 
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        prompt: userMessage,
-        max_tokens: 50,
-      }),
-    });
+    try {
+      // ... (previous code)
 
-    const responseData = await response.json();
-    const botResponse = responseData.choices[0].text;
+      const responseData = await response.json();
+      console.log("API Response Data:", responseData); // Log the response data
 
-    appendMessage("Bot: " + botResponse);
+      const botResponse = responseData.choices[0]?.text || "No response available";
+      appendMessage("Bot: " + botResponse);
+
+    } catch (error) {
+      console.error("Error:", error);
+      appendMessage("Bot: Oops, something went wrong.");
+    }
+
 
     userInput.value = "";
   }
