@@ -1,2 +1,2 @@
-const apiKey = "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";
+const apiKey = "Place Your Api Key Here";
 export default apiKey;
